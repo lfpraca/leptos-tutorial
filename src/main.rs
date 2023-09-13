@@ -20,13 +20,28 @@ fn App(cx: Scope) -> impl IntoView {
 	    "Click me: "
 	    { move || count.get() }
 	</button>
-	<progress
-	    max="50"
-	    value= double_count
+	<ProgressBar
+	    progress= Signal::derive(cx, double_count)
+	    // progress= 60
 	/>
 	<p>
 	    "Double Count: "
 	    { double_count }
 	</p>
+    }
+}
+
+#[component]
+fn ProgressBar(
+    cx: Scope,
+    #[prop(default = 100)] max: u8,
+    #[prop(into)] progress: MaybeSignal<u8>,
+) -> impl IntoView {
+    #[rustfmt::skip]
+    view! { cx,
+        <progress
+            max= max
+            value= { move || progress.get() }
+        />
     }
 }
